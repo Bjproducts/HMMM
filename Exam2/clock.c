@@ -1,46 +1,20 @@
 #include "clock.h"
 
-void Clock_InitPll(PllRange pllRange)
+void Clock_InitPll(uint32_t pll_config)
 {
-    /* Enable HSI16 */
-    RCC->CR |= RCC_CR_HSION;
-    while ((RCC->CR & RCC_CR_HSIRDY) == 0U)
-    {
-    }
+    RCC->CR &= ~RCC_CR_PLLON;        // Turn off PLL
+    while(RCC->CR & RCC_CR_PLLRDY);  // Wait for PLL to stop
 
-    /* Disable PLL */
-    RCC->CR &= ~RCC_CR_PLLON;
-    while ((RCC->CR & RCC_CR_PLLRDY) != 0U)
-    {
-    }
+    RCC->PLLCFGR = pll_config;       // Load configuration
 
-    /* Configure PLL */
-    RCC->PLLCFGR =
-          RCC_PLLCFGR_PLLSRC_HSI
-        | (uint32_t)pllRange
-        | RCC_PLLCFGR_PLLREN;
-
-    /* Enable PLL */
-    RCC->CR |= RCC_CR_PLLON;
-    while ((RCC->CR & RCC_CR_PLLRDY) == 0U)
-    {
-    }
-
-    /* Flash latency */
-    FLASH->ACR |= FLASH_ACR_LATENCY_2;
-
-    /* Switch SYSCLK to PLL */
-    RCC->CFGR &= ~RCC_CFGR_SW;
-    RCC->CFGR |= RCC_CFGR_SW_PLL;
-
-    /* Wait until PLL is used */
-    while ((RCC->CFGR & RCC_CFGR_SWS) != (0x02U << RCC_CFGR_SWS_Pos))
-    {
-    }
+    RCC->CR |= RCC_CR_PLLON;         // Turn on PLL
+    while(!(RCC->CR & RCC_CR_PLLRDY)); // Wait for PLL ready
 }
-
-void Clock_EnableOutput(MCO_Select sel, MCO_Div div)
+void Clock_EnableOutput(uint32_t source, uint32_t div)
 {
-    RCC->CFGR &= ~(RCC_CFGR_MCOSEL | RCC_CFGR_MCOPRE);
-    RCC->CFGR |= ((uint32_t)sel | (uint32_t)div);
+    // Clear MCO bits and set new source
+    RCC->CFGR = (RCC->CFGR & ~(0x7 << 24)) | (source & (0x7 << 24));
+
+    // Clear MCO prescaler bits and set new divider
+    RCC->CFGR = (RCC->CFGR & ~(0xF << 28)) | (div & (0xF << 28));
 }
