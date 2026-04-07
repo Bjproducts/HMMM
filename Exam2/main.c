@@ -38,8 +38,8 @@ int main(void)
     //Part c STATE VAIBALES
     uint32_t leftCount  = 0;
     uint32_t rightCount = 0;
-    int      leftArmed  = 1;
-    int      rightArmed = 1;
+    int leftArmed  = 1;
+    int rightArmed = 1;
 
     //PART D STATE VARIABLE
     int buttonReady = 1;
