@@ -58,6 +58,7 @@ int main(void)
 
     //PARTA
     GPIO_InitAlternateF(GPIOA, 9, 0);
+    
     Clock_EnableOutput(MCO_Sel_SYSCLK, MCO_Div4);
 
     //UART2 CONFIG
