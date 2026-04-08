@@ -161,7 +161,7 @@ void Timer_SetmsTick(TIM_TypeDef * pTimer)
 void Timer_SetusTick(TIM_TypeDef * pTimer)
 {
     /* Assumes timer input clock = 16 MHz */
-    pTimer->PSC = 16U - 1U;
+   pTimer->PSC = 50000 - 1;  // for 50 MHz
     pTimer->ARR = 1U - 1U;
     pTimer->CNT = 0U;
     pTimer->EGR |= TIM_EGR_UG;
