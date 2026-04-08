@@ -56,7 +56,7 @@ int main(void)
     RCC->APBENR1 |= RCC_APBENR1_TIM6EN;         //Enable TIM6
     RCC->APBENR1 |= RCC_APBENR1_TIM7EN;         //Enable TIM7
 
-
+    //PARTA
     GPIO_InitAlternateF(GPIOA, 9, 0);
     Clock_EnableOutput(MCO_Sel_SYSCLK, MCO_Div4);
 
@@ -95,11 +95,13 @@ int main(void)
 
     while (1)
     {
-       
+       //PART B
         if (Timer_PollUIF(TIM6))
             GPIO_Toggle(GPIOA, 6);
 
-      //Read left and right 
+      
+      //PART C
+         //Read left and right 
         int leftPressed  = GPIO_Read(GPIOC, 4);
         int rightPressed = GPIO_Read(GPIOC, 5);
 
